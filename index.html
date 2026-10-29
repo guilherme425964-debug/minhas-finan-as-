@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#172033">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>Virada 2027 — Controle pessoal</title>
+<style>
+:root{--bg:#0b1220;--panel:#121c2d;--panel2:#1b2940;--text:#edf3fb;--muted:#9aabc2;--green:#4ade80;--red:#fb7185;--blue:#7dd3fc;--line:#2b3b52}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,-apple-system,sans-serif}header{padding:22px 16px;background:#101827;border-bottom:1px solid var(--line)}h1{margin:0;font-size:24px}header p{margin:5px 0 0;color:var(--muted);font-size:13px}main{max-width:760px;margin:auto;padding:14px;display:grid;gap:13px}.tabs{display:flex;gap:7px;overflow:auto}.tab{white-space:nowrap;background:var(--panel);color:var(--muted);border:1px solid var(--line);padding:10px 13px;border-radius:11px;font-weight:700}.tab.active{background:#d8f4ff;color:#0b1220}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:15px}h2{font-size:17px;margin:0 0 12px}.muted{color:var(--muted);font-size:12px;line-height:1.5}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.kpi{background:var(--panel2);border-radius:12px;padding:12px;min-width:0}.kpi span{display:block;color:var(--muted);font-size:12px}.kpi strong{display:block;font-size:20px;margin-top:5px;overflow-wrap:anywhere}.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}label{display:block;color:var(--muted);font-size:12px;margin:10px 0 5px}input,select,textarea{width:100%;background:#0b1423;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px;font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 13px;font-weight:750;background:#d8f4ff;color:#0b1220}.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}.danger{background:#4a1d2b;color:#fecdd3}.full{width:100%;margin-top:12px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.hidden{display:none!important}.bar{height:8px;background:#2b3b52;border-radius:10px;overflow:hidden;margin:10px 0}.bar div{height:100%;width:0;background:var(--green)}.item{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.item small{display:block;color:var(--muted);margin-top:3px}.notice{background:#173047;border:1px solid #31536c;border-radius:12px;padding:12px;font-size:13px;line-height:1.5}.habit{display:flex;gap:9px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}.habit input{width:19px;height:19px;accent-color:var(--green)}.empty{color:var(--muted);font-size:13px;padding:8px 0}footer{text-align:center;color:var(--muted);font-size:11px;padding:10px}@media(min-width:600px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header><h1>🏁 Virada 2027</h1><p>Controle seu dinheiro. Cumpra seu plano.</p></header>
+<main>
+<div class="tabs">
+<button class="tab active" data-page="resumo">Resumo</button><button class="tab" data-page="dia">Fechamento diário</button><button class="tab" data-page="dividas">Dívidas</button><button class="tab" data-page="historico">Histórico</button><button class="tab" data-page="backup">Backup</button>
+</div>
+<section id="resumo" class="page">
+<div class="notice">Os registros ficam salvos neste navegador e neste aparelho. Use a aba Backup para exportar uma cópia regularmente.</div>
+<div class="card"><h2>Visão financeira</h2><div class="grid">
+<div class="kpi"><span>Líquido registrado no mês</span><strong id="monthNet">R$ 0</strong></div>
+<div class="kpi"><span>Ganhos recebidos no mês</span><strong id="monthIncome" class="green">R$ 0</strong></div>
+<div class="kpi"><span>Dívidas em aberto</span><strong id="debtTotal" class="red">R$ 0</strong></div>
+<div class="kpi"><span>Dinheiro guardado registrado</span><strong id="savings" class="blue">R$ 0</strong></div>
+</div><p class="muted">O líquido é calculado depois dos custos e gastos registrados. Inclua despesas fixas quando pagá-las.</p></div>
+<div class="card"><h2>Meta diária</h2><div class="grid"><div class="kpi"><span>Meta de líquido por dia</span><strong id="goalView">R$ 300</strong></div><div class="kpi"><span>Último registro</span><strong id="lastDate">—</strong></div></div><div class="bar"><div id="goalBar"></div></div><p id="goalText" class="muted">Registre um dia de trabalho para acompanhar a meta.</p></div>
+<div class="card"><h2>Disciplina de hoje</h2><div id="habits"></div><button id="clearHabits" class="full secondary">Desmarcar hábitos</button></div>
+<div class="card"><h2>Para onde foi o dinheiro?</h2><div id="categories"></div></div>
+</section>
+<section id="dia" class="page hidden">
+<div class="card"><h2>Registrar fechamento</h2><div class="notice">Salvamento automático de rascunho ativado: os campos são guardados neste aparelho enquanto você preenche. Toque em “Salvar fechamento” para registrar oficialmente o dia no histórico.</div><p class="muted">Coloque os ganhos recebidos e todos os gastos do dia. Não conte transferência entre suas próprias contas como renda.</p>
+<label>Data</label><input id="date" type="date">
+<div class="row"><div><label>Ganhos recebidos (R$)</label><input id="income" type="number" min="0" step=".01" placeholder="300"></div><div><label>Combustível (R$)</label><input id="fuel" type="number" min="0" step=".01" placeholder="60"></div></div>
+<div class="row"><div><label>Manutenção/reserva da moto (R$)</label><input id="maintenance" type="number" min="0" step=".01" placeholder="15"></div><div><label>Alimentação no trabalho (R$)</label><input id="food" type="number" min="0" step=".01" placeholder="15"></div></div>
+<div class="row"><div><label>Gastos pessoais (R$)</label><input id="personal" type="number" min="0" step=".01" placeholder="0"></div><div><label>Outros gastos (R$)</label><input id="other" type="number" min="0" step=".01" placeholder="0"></div></div>
+<div class="row"><div><label>Pago em dívidas hoje (R$)</label><input id="debtPaid" type="number" min="0" step=".01" placeholder="0"></div><div><label>Guardado hoje (R$)</label><input id="savedToday" type="number" min="0" step=".01" placeholder="0"></div></div>
+<label>Detalhes de gastos / observações</label><textarea id="notes" rows="2" placeholder="Ex.: café R$ 5, lanche R$ 12"></textarea>
+<div class="grid" style="margin-top:12px"><div class="kpi"><span>Líquido após gastos do dia</span><strong id="preview" class="green">R$ 0</strong></div><div class="kpi"><span>Meta diária</span><strong>R$ 300</strong></div></div>
+<button id="saveDay" class="full">Salvar fechamento</button><button id="clearForm" class="full secondary">Limpar formulário</button>
+</div>
+<div class="card"><h2>Despesas fixas mensais</h2><label>Total previsto (R$)</label><input id="fixed" type="number" min="0" step=".01" placeholder="1600"><button id="saveFixed" class="full secondary">Salvar despesa fixa</button><p class="muted">Esse valor é uma referência do orçamento, não será descontado automaticamente dos dias.</p></div>
+</section>
+<section id="dividas" class="page hidden">
+<div class="card"><h2>Adicionar dívida</h2><label>Nome / para quem deve</label><input id="debtName" placeholder="Ex.: dívida da moto"><div class="row"><div><label>Saldo restante (R$)</label><input id="debtAmount" type="number" min="0" step=".01" placeholder="1200"></div><div><label>Vencimento (opcional)</label><input id="debtDue" type="date"></div></div><label>Prioridade</label><select id="debtPriority"><option value="Alta">Alta — juros/prazo</option><option value="Média">Média</option><option value="Baixa">Baixa</option></select><button id="addDebt" class="full">Adicionar dívida</button></div>
+<div class="card"><h2>Suas dívidas</h2><div id="debtList"></div><div class="kpi"><span>Total em aberto</span><strong id="debtSum" class="red">R$ 0</strong></div></div>
+</section>
+<section id="historico" class="page hidden"><div class="card"><h2>Histórico de fechamentos</h2><div id="historyList"></div></div></section>
+<section id="backup" class="page hidden"><div class="card"><h2>Backup dos seus dados</h2><p class="muted">Exporte seus registros para um arquivo JSON e guarde em um local seguro. Para recuperar, importe o arquivo neste mesmo app.</p><button id="export" class="full">Exportar backup</button><label>Importar backup (.json)</label><input id="importFile" type="file" accept=".json,application/json"><button id="import" class="full secondary">Importar e substituir dados</button><button id="wipe" class="full danger">Apagar todos os dados deste app</button><p class="muted">Não há conta online nem sincronização automática. Se limpar os dados do navegador ou trocar de aparelho sem backup, os registros podem ser perdidos.</p></div></section>
+<footer>Virada 2027 · Ferramenta pessoal, não conectada ao banco.</footer>
+</main>
+<script>
+const KEY='virada2027-v1';
+const today=()=>new Date().toLocaleDateString('en-CA');
+const blank=()=>({days:[],debts:[],habits:{},goal:300,fixed:1600,savingsStart:0});
+let data;
+try{data=JSON.parse(localStorage.getItem(KEY))||blank()}catch(e){data=blank()}
+const $=id=>document.getElementById(id), money=v=>(Number(v)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}), num=id=>Math.max(0,Number($(id).value)||0);
+function persist(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function setPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==p));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.page===p))}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setPage(b.dataset.page)));
+$('date').value=today();$('fixed').value=data.fixed??1600;
+const fields=['income','fuel','maintenance','food','personal','other','debtPaid','savedToday'];
+function preview(){let v=num('income')-['fuel','maintenance','food','personal','other'].reduce((s,id)=>s+num(id),0);$('preview').textContent=money(v);$('preview').className=v<0?'red':''}
+
+const DRAFT_KEY='virada2027-daily-draft-v1';
+function saveDraft(){
+  const draft={};
+  ['date',...fields,'notes'].forEach(id=>draft[id]=$(id).value);
+  try{localStorage.setItem(DRAFT_KEY,JSON.stringify(draft));}catch(e){}
+}
+function restoreDraft(){
+  try{
+    const draft=JSON.parse(localStorage.getItem(DRAFT_KEY)||'null');
+    if(draft){
+      ['date',...fields,'notes'].forEach(id=>{
+        if(draft[id]!==undefined && $(id)) $(id).value=draft[id];
+      });
+    }
+  }catch(e){}
+}
+restoreDraft();
+fields.forEach(id=>$(id).addEventListener('input',()=>{preview();saveDraft()}));
+['date','notes'].forEach(id=>$(id).addEventListener('input',saveDraft));
+
+$('saveDay').onclick=()=>{let date=$('date').value||today();let entry={date};fields.forEach(id=>entry[id]=num(id));entry.notes=$('notes').value.trim();entry.net=entry.income-entry.fuel-entry.maintenance-entry.food-entry.personal-entry.other;let i=data.days.findIndex(d=>d.date===date);if(i>=0)data.days[i]=entry;else data.days.push(entry);data.days.sort((a,b)=>b.date.localeCompare(a.date));persist();try{localStorage.removeItem(DRAFT_KEY)}catch(e){};alert('Fechamento salvo neste aparelho.');setPage('resumo')};
+$('clearForm').onclick=()=>{fields.forEach(id=>$(id).value='');$('notes').value='';try{localStorage.removeItem(DRAFT_KEY)}catch(e){};preview()};
+$('saveFixed').onclick=()=>{data.fixed=num('fixed');persist();alert('Despesa fixa salva.')};
+$('addDebt').onclick=()=>{let name=$('debtName').value.trim(),amount=num('debtAmount');if(!name||amount<=0){alert('Informe o nome e um saldo maior que zero.');return}data.debts.push({id:Date.now(),name,amount,due:$('debtDue').value,priority:$('debtPriority').value});$('debtName').value='';$('debtAmount').value='';$('debtDue').value='';persist()};
+function renderDebts(){$('debtList').innerHTML='';if(!data.debts.length)$('debtList').innerHTML='<div class="empty">Nenhuma dívida cadastrada. Adicione as dívidas atuais acima.</div>';data.debts.forEach(d=>{let el=document.createElement('div');el.className='item';let left=document.createElement('div');left.innerHTML='<strong></strong><small></small>';left.querySelector('strong').textContent=d.name;left.querySelector('small').textContent=`Prioridade ${d.priority}${d.due?' · vence '+d.due:''}`;let right=document.createElement('div');right.style.textAlign='right';right.innerHTML='<div class="amount"></div><button class="secondary" style="padding:6px 9px;margin-top:5px">Editar saldo</button> <button class="danger" style="padding:6px 9px">Remover</button>';right.querySelector('.amount').textContent=money(d.amount);right.querySelectorAll('button')[0].onclick=()=>{let v=prompt('Saldo restante atualizado (R$)',d.amount);if(v!==null&&Number(v)>=0){d.amount=Number(v);persist()}};right.querySelectorAll('button')[1].onclick=()=>{if(confirm('Remover esta dívida da lista?')){data.debts=data.debts.filter(x=>x.id!==d.id);persist()}};el.append(left,right);$('debtList').append(el)});let sum=data.debts.reduce((s,d)=>s+d.amount,0);$('debtSum').textContent=money(sum);$('debtTotal').textContent=money(sum)}
+function renderHabits(){let list=[['work','Cumpri meu plano de trabalho'],['tracking','Registrei todos os gastos'],['noImpulse','Evitei compras por impulso'],['health','Cuidei do sono, alimentação e segurança']];let key=today();$('habits').innerHTML='';list.forEach(([id,label])=>{let row=document.createElement('label');row.className='habit';let cb=document.createElement('input');cb.type='checkbox';cb.checked=!!(data.habits[key]&&data.habits[key][id]);cb.onchange=()=>{data.habits[key]=data.habits[key]||{};data.habits[key][id]=cb.checked;localStorage.setItem(KEY,JSON.stringify(data))};let txt=document.createElement('span');txt.textContent=label;row.append(cb,txt);$('habits').append(row)})}
+$('clearHabits').onclick=()=>{data.habits[today()]={};persist()};
+function render(){let now=today().slice(0,7),days=data.days.filter(d=>d.date.slice(0,7)===now);let income=days.reduce((s,d)=>s+d.income,0),net=days.reduce((s,d)=>s+d.net,0),saved= data.savingsStart+data.days.reduce((s,d)=>s+d.savedToday,0)-data.days.reduce((s,d)=>s+d.debtPaid,0);$('monthNet').textContent=money(net);$('monthIncome').textContent=money(income);$('savings').textContent=money(saved);$('goalView').textContent=money(data.goal||300);$('lastDate').textContent=data.days.length?data.days[0].date:'—';let latest=data.days.find(d=>d.date===today())||data.days[0];let netToday=latest?latest.net:0;$('goalBar').style.width=Math.min(100,Math.max(0,netToday/(data.goal||300)*100))+'%';$('goalText').textContent=latest?`Último dia registrado: ${money(netToday)} líquido. ${netToday>=(data.goal||300)?'Meta atingida!':`Faltaram ${money((data.goal||300)-netToday)} para a meta.`}`:'Registre um dia de trabalho para acompanhar a meta.';
+renderDebts();renderHabits();
+let sums={Combustível:0,'Manutenção da moto':0,Alimentação:0,'Gastos pessoais':0,'Outros gastos':0,'Pagamento de dívidas':0,'Guardado':0};data.days.forEach(d=>{sums.Combustível+=d.fuel;sums['Manutenção da moto']+=d.maintenance;sums.Alimentação+=d.food;sums['Gastos pessoais']+=d.personal;sums['Outros gastos']+=d.other;sums['Pagamento de dívidas']+=d.debtPaid;sums.Guardado+=d.savedToday});
+$('categories').innerHTML='';Object.entries(sums).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{let el=document.createElement('div');el.className='item';el.innerHTML='<span></span><strong></strong>';el.children[0].textContent=k;el.children[1].textContent=money(v);$('categories').append(el)});if(!$('categories').children.length)$('categories').innerHTML='<div class="empty">Ainda não há despesas registradas.</div>';
+$('historyList').innerHTML='';if(!data.days.length)$('historyList').innerHTML='<div class="empty">Seu histórico aparecerá aqui depois do primeiro fechamento.</div>';data.days.forEach(d=>{let el=document.createElement('div');el.className='item';let l=document.createElement('div');l.innerHTML='<strong></strong><small></small>';l.children[0].textContent=d.date;l.children[1].textContent=d.notes||'Sem observações';let r=document.createElement('div');r.style.textAlign='right';r.innerHTML='<strong></strong><button class="danger" style="display:block;margin-top:5px;padding:6px 9px">Excluir</button>';r.children[0].textContent=money(d.net);r.children[1].onclick=()=>{if(confirm('Excluir este fechamento?')){data.days=data.days.filter(x=>x.date!==d.date);persist()}};el.append(l,r);$('historyList').append(el)})}
+$('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='backup-virada-2027.json';a.click();URL.revokeObjectURL(url)};
+$('import').onclick=()=>{let f=$('importFile').files[0];if(!f){alert('Escolha um arquivo JSON primeiro.');return}let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.days)||!Array.isArray(x.debts))throw Error();if(confirm('Importar vai substituir os dados atuais. Continuar?')){data=x;persist();alert('Backup importado.')}}catch(e){alert('Arquivo de backup inválido.')}};r.readAsText(f)};
+$('wipe').onclick=()=>{if(confirm('Tem certeza? Isso apaga todos os registros deste app neste aparelho.')){data=blank();persist();$('fixed').value=data.fixed}};
+render();
+</script>
+
+<script>
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+
+</body></html>

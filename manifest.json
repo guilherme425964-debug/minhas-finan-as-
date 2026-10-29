@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "Virada 2027 — Controle Financeiro",
+  "short_name": "Virada 2027",
+  "description": "Controle pessoal de ganhos, gastos, dívidas e metas diárias.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#172033",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+# Virada 2027 — pacote para instalar como app
+
+## Publicar no GitHub Pages
+1. Entre em https://github.com e crie uma conta, se necessário.
+2. Crie um repositório público chamado `virada-2027`.
+3. Envie os quatro arquivos desta pasta para a raiz do repositório: `index.html`, `manifest.json`, `sw.js` e `icon.svg`.
+4. No repositório, abra Settings → Pages.
+5. Em Build and deployment, selecione Deploy from a branch; escolha `main` e `/ (root)`, depois Save.
+6. Aguarde o endereço publicado aparecer em Settings → Pages.
+7. No Android, abra esse endereço no Chrome. Toque no menu ⋮ e escolha “Instalar app” ou “Adicionar à tela inicial”.
+
+## Dados
+Os lançamentos e rascunhos ficam no armazenamento local do navegador, neste aparelho. Não apague os dados do site/navegador sem antes exportar o backup dentro do app. O modo offline funciona após a primeira abertura online bem-sucedida.
